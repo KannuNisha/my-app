@@ -25,9 +25,15 @@ function App() {
   }, [habits]);
 
   const addHabit = (habitText) => {
-    setHabits([...habits,
-    { text: habitText, completed: false }
-    ]);
+    if (habitText.trim()) {
+
+      setHabits([...habits,
+      { text: habitText, completed: false }
+      ]);
+      alert("Habit added successfuly!");
+    } else {
+      alert("Habit can not be empty!")
+    }
   };
 
   const toggleHabit = (index) => {
@@ -39,6 +45,7 @@ function App() {
 
   const deleteHabit = (index) => {
     setHabits(habits.filter((_, i) => i !== index));
+    alert("Habit deleted successfully!");
   }
 
   const clearAllHabits = () => {
@@ -51,12 +58,17 @@ function App() {
   };
 
   const saveEdit = () => {
-    const updatedHabits = habits.map((habit, index) =>
-      index === editingIndex ? { ...habit, text: editText } : habit
-    );
-    setHabits(updatedHabits);
-    setEditingIndex(null);
-    setEditText("");
+    if (editText.trim()) {
+      const updatedHabits = habits.map((habit, index) =>
+        index === editingIndex ? { ...habit, text: editText } : habit
+      );
+      setHabits(updatedHabits);
+      setEditingIndex(null);
+      setEditText("");
+      alert("Habit updated successfully!");
+    } else {
+      alert("Habit can not be empty!")
+    }
   };
 
   const cancelEdit = () => {
@@ -91,19 +103,19 @@ function App() {
             style={{ textDecoration: habit.completed ? 'line-through' : 'none' }}
           >
             {editingIndex === index ? (
-            <div>
-              <input
-                type="text"
-                value={editText}
-                onChange={(e) => setEditText(e.target.value)} />
-              <button onClick={saveEdit}>Save</button>
-              <button onClick={cancelEdit}>Cancel</button>
-            </div>
+              <div>
+                <input
+                  type="text"
+                  value={editText}
+                  onChange={(e) => setEditText(e.target.value)} />
+                <button onClick={saveEdit}>Save</button>
+                <button onClick={cancelEdit}>Cancel</button>
+              </div>
             ) : (
-            <div>
-              {habit.text}
-              <button onClick={(e) => {e.stopPropagation();deleteHabit(index);}}>Delete</button>
-              <button onClick={(e) => {e.stopPropagation(); startEdidting(index);}}>Edit</button>
+              <div>
+                {habit.text}
+                <button onClick={(e) => { e.stopPropagation(); deleteHabit(index); }}>Delete</button>
+                <button onClick={(e) => { e.stopPropagation(); startEdidting(index); }}>Edit</button>
               </div>
             )}
           </li>
