@@ -1,12 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 
 function App() {
-  const [habits, setHabits] = useState([]); 
+  const [habits, setHabits] = useState([]);
+
+  useEffect(() => {
+    const savedHabits = localStorage.getItem('habits');
+    if (savedHabits) {
+      try {
+        setHabits(JSON.parse(savedHabits));
+      } catch (e) {
+        console.error("Failed to parse saved habits", e);
+        setHabits([]);
+      }
+    }
+  }, [])
+
+  useEffect(() => {
+    if (habits.length > 0) {
+    localStorage.setItem('habits', JSON.stringify(habits));
+    }
+  }, [habits]);
 
   const addHabit = (habitText) => {
-    setHabits([...habits, 
-      { text: habitText, completed: false }
+    setHabits([...habits,
+    { text: habitText, completed: false }
     ]);
   };
 
@@ -21,6 +39,10 @@ function App() {
     setHabits(habits.filter((_, i) => i !== index));
   }
 
+  const clearAllHabits = () => {
+    setHabits([]);
+  }
+
   return (
     <div className="App">
       <header className="App header">
@@ -30,22 +52,22 @@ function App() {
 
       <div>
         <input
-        type="text"
-        placeholder="New Habit"
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') {
-            addHabit(e.target.value);
-            e.target.value = '';
-          }
-        }}
+          type="text"
+          placeholder="New Habit"
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              addHabit(e.target.value);
+              e.target.value = '';
+            }
+          }}
         />
       </div>
 
       <ul>
         {habits.map((habit, index) => (
           <li key={index}
-          onClick={() => toggleHabit(index)}
-          style={{ textDecoration: habit.completed ? 'line-through' : 'none'}}
+            onClick={() => toggleHabit(index)}
+            style={{ textDecoration: habit.completed ? 'line-through' : 'none' }}
           >
             {habit.text}
             <button onClick={(e) => {
@@ -53,10 +75,12 @@ function App() {
               deleteHabit(index);
             }}>
               Delete
-              </button>
-            </li>
+            </button>
+          </li>
         ))}
       </ul>
+
+      <button onClick={clearAllHabits}>Clear All</button>
     </div>
   );
 }
