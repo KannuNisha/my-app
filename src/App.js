@@ -3,6 +3,8 @@ import './App.css';
 
 function App() {
   const [habits, setHabits] = useState([]);
+  const [editingIndex, setEditingIndex] = useState(null);
+  const [editText, setEditText] = useState("");
 
   useEffect(() => {
     const savedHabits = localStorage.getItem('habits');
@@ -18,7 +20,7 @@ function App() {
 
   useEffect(() => {
     if (habits.length > 0) {
-    localStorage.setItem('habits', JSON.stringify(habits));
+      localStorage.setItem('habits', JSON.stringify(habits));
     }
   }, [habits]);
 
@@ -41,6 +43,25 @@ function App() {
 
   const clearAllHabits = () => {
     setHabits([]);
+  }
+
+  const startEdidting = (index) => {
+    setEditingIndex(index);
+    setEditText(habits[index].text);
+  };
+
+  const saveEdit = () => {
+    const updatedHabits = habits.map((habit, index) =>
+      index === editingIndex ? { ...habit, text: editText } : habit
+    );
+    setHabits(updatedHabits);
+    setEditingIndex(null);
+    setEditText("");
+  };
+
+  const cancelEdit = () => {
+    setEditingIndex(null);
+    setEditText("");
   }
 
   return (
@@ -69,13 +90,22 @@ function App() {
             onClick={() => toggleHabit(index)}
             style={{ textDecoration: habit.completed ? 'line-through' : 'none' }}
           >
-            {habit.text}
-            <button onClick={(e) => {
-              e.stopPropagation();
-              deleteHabit(index);
-            }}>
-              Delete
-            </button>
+            {editingIndex === index ? (
+            <div>
+              <input
+                type="text"
+                value={editText}
+                onChange={(e) => setEditText(e.target.value)} />
+              <button onClick={saveEdit}>Save</button>
+              <button onClick={cancelEdit}>Cancel</button>
+            </div>
+            ) : (
+            <div>
+              {habit.text}
+              <button onClick={(e) => {e.stopPropagation();deleteHabit(index);}}>Delete</button>
+              <button onClick={(e) => {e.stopPropagation(); startEdidting(index);}}>Edit</button>
+              </div>
+            )}
           </li>
         ))}
       </ul>
