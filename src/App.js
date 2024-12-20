@@ -5,6 +5,7 @@ function App() {
   const [habits, setHabits] = useState([]);
   const [editingIndex, setEditingIndex] = useState(null);
   const [editText, setEditText] = useState("");
+  // const [quote, setQuote] = useState("");
 
   useEffect(() => {
     const savedHabits = localStorage.getItem('habits');
@@ -36,11 +37,23 @@ function App() {
     }
   };
 
+  // const fetchQuote = () => {
+  //   fetch("https://api.freeapi.app/api/v1/public/quotes/quote/random")
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       setQuote(`${data.data.quote} - ${data.data.author}`);
+  //     })
+  //     .catch((error) => console.error("Error fetching quote:", error));
+  // };
+
   const toggleHabit = (index) => {
     setHabits(
       habits.map((habit, i) =>
         i === index ? { ...habit, completed: !habit.completed } : habit)
     );
+    // if (!habits[index].completed) {
+    //   fetchQuote();
+    // }
   };
 
   const deleteHabit = (index) => {
@@ -79,7 +92,7 @@ function App() {
   return (
     <div className="App">
       <header className="App header">
-        <h1>Welcome to My abit Tracker App</h1>
+        <h1>Welcome to My Habit Tracker App</h1>
         <p>Start tracking your habits today!</p>
       </header>
 
@@ -123,6 +136,12 @@ function App() {
       </ul>
 
       <button onClick={clearAllHabits}>Clear All</button>
+
+      {/* {quote && (
+        <div className="quote">
+          <p>{quote}</p>
+        </div>
+      )} */}
     </div>
   );
 }
