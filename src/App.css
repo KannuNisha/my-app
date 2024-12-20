@@ -1,6 +1,15 @@
+* {
+  /* background-image: url(background.png); */
+  font-family: 'Times New Roman', Times, serif;
+  /* background-repeat: no-repeat; */
+  /* background-position: bottom; */
+  background-color: azure
+
+}
 .App {
   text-align: center;
 }
+
 
 .App-logo {
   height: 40vmin;
@@ -14,7 +23,7 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #417bf1;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -22,6 +31,10 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+}
+
+.App-input {
+ bottom: 1px solid black;
 }
 
 .App-link {
